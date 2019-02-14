@@ -1,5 +1,5 @@
-# Magisk Tools
-Magisk comes with a huge collections of tools for installation, daemons, and utilities for developers. This documentation covers the 3 binaries and all included applets. The binaries and applets are shown below:
+# Magisk 工具
+Magisk 为开发人员提供了大量实用工具。本文档涵盖了3个二进制文件和它们包含的部件。二进制文件和其部件如下所示：
 
 ```
 magiskboot                 /* binary */
@@ -13,16 +13,16 @@ su -> magisk
 imgtool -> magisk
 ```
 
-Note: The Magisk zip you download only contains `magiskboot` and `magiskinit`. The binary `magisk` is compressed and embedded into `magiskinit`. Push `magiskinit` to your device and run `./magiskinit -x magisk <path>` to extract `magisk` out of the binary.
+备注：Magisk 安装包内只有 `magiskboot` 和 `magiskinit`。`magisk` 已被嵌入 `magiskinit`。 推送 `magiskinit` 到设备并执行 `./magiskinit -x magisk <path>` 即可提取 `magisk` 二进制文件到指定位置。
 
 ### magiskboot
-A tool to unpack / repack boot images, parse / patch / extract cpio, patch dtb, hex patch binaries, and compress / decompress files with multiple algorithms.
+一个能够解包、打包 boot 镜像；解析、修补、提取 cpio；修补 dtb；hex 修补二进制文件和使用多种算法压缩、解压文件的工具。
 
-`magiskboot` natively supports (which means it does not rely on external tools) common compression formats including `gzip`, `lz4`, `lz4_legacy` ([only used on LG](https://events.static.linuxfound.org/sites/events/files/lcjpcojp13_klee.pdf)), `lzma`, `xz`, and `bzip2`.
+`magiskboot` 本身支持 (即不依赖外部工具) 常见压缩格式，包括 `gzip`、`lz4`、`lz4_legacy` ([仅 LG 使用](https://events.static.linuxfound.org/sites/events/files/lcjpcojp13_klee.pdf))、`lzma`、`xz` 和 `bzip2`。
 
-The concept of `magiskboot` is to make boot image modification much simpler. For unpacking, it parses the header and all sections in the image (kernel, ramdisk, second, dtb, extra), detect compression format used in each section, and decompress while extraction. Each extracted sections are raw data, ready for direct modification. For repacking, the original boot image is required so the original headers can be used, changing only the necessary entries such as section sizes and checksum, and finally compress each sections back with the original format.
+`magiskboot` 的目的是让 Boot 镜像修改更简单。 解包时，它会解析镜像标头和所有部分（kernel, ramdisk, second, dtb, extra），检测每个部分使用的压缩格式，并在提取时解压。每个提取出的部分都是原始数据，可以直接修改。打包时，需要原始 Boot 镜像，使用它的标头，仅修改必要条目 如大小及校验和，最后用原始格式压缩每个部分。
 
-The tool also supports a variaty of CPIO operations that can modify CPIO archives without any extracting and repacking involved.
+此工具也支持各种 CPIO 操作，可以直接修改 CPIO 档案而无需提取或打包。
 
 ```
 Usage: ./magiskboot <action> [args...]
@@ -93,12 +93,12 @@ Supported actions:
   --compress[=method] <infile> [outfile]
     Compress <infile> with [method] (default: gzip), optionally to [outfile]
     <infile>/[outfile] can be '-' to be STDIN/STDOUT
-    Supported methods: gzip xz lzma bzip2 lz4 lz4_legacy 
+    Supported methods: gzip xz lzma bzip2 lz4 lz4_legacy
 
   --decompress <infile> [outfile]
     Detect method and decompress <infile>, optionally to [outfile]
     <infile>/[outfile] can be '-' to be STDIN/STDOUT
-    Supported methods: gzip xz lzma bzip2 lz4 lz4_legacy 
+    Supported methods: gzip xz lzma bzip2 lz4 lz4_legacy
 
   --sha1 <file>
     Print the SHA1 checksum for <file>
@@ -108,14 +108,14 @@ Supported actions:
 ```
 
 ### magiskinit
-This binary will replace `init` in the ramdisk of a Magisk patched boot image. It is required for supporting devices using system as root (most A/B devices, plus some odd-balls like Huawei EMUI 9), but the tool is extended to support all traditional devices so the same installation setup could be used on all devices. More details can be found in the **Pre-Init** section in [Magisk Booting Process](details.md#magisk-booting-process).
+这个文件会替换 Boot 镜像 ramdisk 里的 `init` 文件，这对于支持 system-as-root 设备（所有 A/B 设备及一些奇怪的变种如华为 EMUI 9）来说是必须的。但它也支持传统设备，因此能在所有设备上使用相同的安装方法。更多信息请参考[Magisk 启动流程](details.md#magisk-booting-process)的**Pre-Init**小节。
 
 ### magiskpolicy
-(This tool is aliased to `supolicy` for compatibility with SuperSU's sepolicy tool)
+（此工具有一个 `supolicy` 的别名，用于兼容 SuperSU 的 sepolicy 工具）
 
-An applet of `magiskinit`. This tool could be used for advanced developers to modify SELinux policies. In common scenarios like Linux server admins, they would directly modify the SELinux policy sources (`*.te`) and recompile the `sepolicy` binary, but here on Android we directly patch the binary file (or runtime policies).
+`magiskinit` 的部件，可用于高级开发人员修改 SELinux 策略。在管理 Linux 服务器时，一般是修改 SELinux 策略源 (`*.te`) 然后重新编译 `sepolicy` 二进制文件，但在 Android 上我们直接修改二进制文件（或使用运行时策略）。
 
-All processes spawned from the Magisk daemon, including root shells and all its forks, are running in the context `u:r:magisk:s0`. The rule used on all Magisk installed systems can be viewed as stock `sepolicy` with these patches: `magiskpolicy --magisk 'allow magisk * * *'`.
+所有 Magisk 进程，包括 root shell 及其子进程，都运行在 `u:r:magisk:s0` 环境。所有安装了 Magisk 的系统所使用的规则都可以被视为原始 `sepolicy` 加以下修补： `magiskpolicy --magisk 'allow magisk * * *'`。
 
 ```
 Usage: magiskpolicy [--options...] [policy statements...]
@@ -176,7 +176,7 @@ allow source2 target2 permission-class { all-permissions }
 
 
 ### magisk
-When the magisk binary is called with the name `magisk`, it works as an utility tool with many helper functions and the entry points for `init` to start Magisk services.
+当此文件作为 `magisk` 这个名字使用时, 是一个有许多辅助功能的实用程序，及 `init` 启动 Magisk 服务的入口点。
 
 ```
 Usage: magisk [applet [arguments]...]
@@ -202,7 +202,7 @@ Supported applets:
 ```
 
 ### su
-An applet of `magisk`, the MagiskSU entry point. Good old `su` command.
+`magisk` 的部件，MagiskSU 的入口点。 Good old `su` command.
 
 ```
 Usage: su [options] [-] [user [argument...]]
@@ -220,10 +220,10 @@ Options:
   --mount-master                force run in the global mount namespace
 ```
 
-Note: even though the `-Z, --context` option is not listed above, the option still exists for CLI compatibility with apps designed for SuperSU. However the option is silently ignored since it's no longer relevant.
+备注：尽管没有列出 `-Z, --context` 选项，它依然存在，以便兼容为 SuperSU 开发的应用。 但该选项会被忽略，没有任何效果。
 
 ### resetprop
-An applet of `magisk`. An advanced system property manipulation utility. Check the [Resetprop Details](details.md#resetprop) for more background information.
+`magisk` 的部件，用于操作系统属性。更多信息请查阅 [Resetprop](details.md#resetprop)。
 
 ```
 Usage: resetprop [flags] [options...]
@@ -245,7 +245,7 @@ Flags:
 ```
 
 ### magiskhide
-An applet of `magisk`, the CLI to control MagiskHide. Use this tool to communicate with the daemon to change MagiskHide settings.
+`magisk` 的部件，用于控制 MagiskHide。它会连接到守护进程，修改 MagiskHide 设置。
 
 ```
 Usage: magiskhide [--options [arguments...] ]
@@ -259,7 +259,7 @@ Options:
 ```
 
 ### imgtool
-An applet of `magisk`, a collection of common commands used to create and manage `ext4` images.
+`magisk` 的部件，用于创建和管理 `ext4` 镜像。
 
 ```
 Usage: imgtool <action> [args...]

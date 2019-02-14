@@ -1,58 +1,46 @@
-# Installation
-If you already have Magisk installed, it is **strongly recommended to upgrade directly via Magisk Manager**.
-The following tutorial is for first time users. For Huawei users, please check the specific section for more information.
+# 安装
+如果你已经安装了 Magisk,  **强烈建议直接通过 Magisk Manager 升级**。
+以下教程适用于初次使用的用户。华为用户请查看具体小节，获取更多信息。
 
-## Prerequisite
-- If you plan to install custom kernels, flash the zip **AFTER** installing Magisk
-- Make sure to remove any 'boot image mods' such as other root solutions. The easiest way is to restore the boot image from factory images, or reflash a *non-prerooted* custom ROM
+## 前提
+- 如果准备安装自定义内核, 请在安装 Magisk**之后**刷入内核安装包。
+- 确保已经删除任何 “boot image mods” ，比如其它 Root 方案（SuperSU）。最简单的方法是恢复原厂 Boot 镜像，或重刷**不自带 Root**的自定义 ROM。
 
-## Custom Recovery
-If your device have custom recovery support, the easiest way is to install it through custom recoveries, such as TWRP.
+## 自定义 Recovery
+如果设备有自定义 Recovery 支持, 最简单的方法是通过它进行安装，比如 TWRP.
 
-- Download the Magisk installer zip
-- Reboot to custom recovery
-- Flash the zip and reboot
-- Check whether Magisk Manager is installed. If for some reason it isn't installed automatically, manually install the APK
+- 下载 Magisk 安装包
+- 重启到自定义 Recovery
+- 刷入安装包并重启
+- 检查 Magisk Manager 是否安装，如果因为某些问题未能自动安装，请手动安装 Magisk Manager 应用
 
-## Boot Image Patching
-This is the "cool" way to install Magisk on your device. Either your device does not have proper custom recoveries, your device is using the A/B partition scheme and you don't want to mix recovery and boot images together, or you have other concerns (e.g. [OTA Installation](tutorials.md#ota-installation)), you should use this method instead.
+## 修补 Boot 镜像
+这是安装 Magisk 的一个很酷的方式。 不管是因为你的设备没有一个良好的自定义 Recovery，或是正在使用 A/B 分区方案并且不希望 Recovery 与 Boot 镜像混在一起，还是有其它问题（比如[安装 OTA](tutorials.md#安装-ota)）, 均可以使用此安装方法。
 
-In order to use this method, you are required to obtain a copy of the stock boot image, which can be found by extracting OEM provided factory images, or extracted from OTA update zips. If you are unable to obtain one yourself, someone on the Internet might share it somewhere. The following instructions will guide you through the process after you have the copy of boot image.
+要使用这个方法，需要有原厂 Boot 镜像, 可以通过解压 OEM 提供的工厂镜像，或是从 OTA 包内提取。如果无法独立完成这一步，请从互联网寻求帮助。 获得 Boot 镜像后，按照以下说明，完成安装：
 
-- Copy the boot image to your device
-- Download and install the latest Magisk Manager
-- If you're planning to flash the patched boot image through ODIN (Samsung only), go to **Settings > Update Settings > Patched Boot Output Format**, and select *.img.tar*, or else leave it as the default (*.img*)
-- Press **Install > Install > Patch Boot Image File**, and select your stock boot image file
-- Magisk Manager will install Magisk to your boot image, and store it in
-`[Internal Storage]/Download/patched_boot.img[.tar]`
-- Copy the patched boot image from your device to your PC. If you can't find it via MTP, you can pull the file with ADB:
-`adb pull /sdcard/Download/patched_boot.img[.tar]`
-- Flash the patched boot image to your device and reboot. Here is the command if using fastboot on most devices:
-`fastboot flash boot /path/to/patched_boot.img`
+- 复制 Boot 镜像文件到设备存储空间
+- 下载并安装最新版 Magisk Manager
+- 如果你计划通过 ODIN（Samsung 专用）刷入修补后的 Boot 镜像，需要转到 **设置 > 更新设定 > 已修补的 Boot 镜像输出格式**，将其调整为 *.img.tar*。
+- 点按 **安装 > 安装 > 修补 Boot 镜像文件**，在弹出的文档应用内，找到并选中原始 Boot 镜像文件。
+- Magisk Manager 会将 Magisk 安装进 Boot 镜像，并另存为`[内部存储空间]/Download/patched_boot.img[.tar]`
+- 从手机复制修补后的文件到电脑上。如果你不能通过 MTP 找到它，可以通过 adb 拉取文件到电脑:`adb pull /sdcard/Download/patched_boot.img[.tar]`
+- 刷入修补后文件并重启。 对于多数设备，使用 fastboot 命令：`fastboot flash boot patched_boot.img`
 
-## Huawei
-Huawei devices using Kirin processors have a different partitioning method from most common devices. Magisk is usually installed to the `boot` partition of the device, however Huawei devices does not have this partition. Depending on what EMUI version your device is running the instructions are slightly different. Even if you have switched to a custom ROM, you shall still know which version of EMUI you are running before switching.
+## 华为
+使用麒麟处理器的华为设备采用了与常规设备不同的分区方法。 Magisk 通常安装在设备的`boot`分区，但华为设备没有这个分区。根据设备运行的 EMUI 版本，说明略有不同。即使设备已切换到自定义 ROM，仍需知道在切换之前，使用的是哪个版本的 EMUI。
 
-### Obtain Stock Images
-Huawei does not release official factory images, however most firmware zips can be downloaded from the [Huawei Firmware Database](http://pro-teammt.ru/firmware-database/). To extract the images from `UPDATE.APP` in the zip, you have to use [Huawei Update Extractor](https://forum.xda-developers.com/showthread.php?t=2433454) (Windows only!)
+### 获取原厂镜像
+华为官方不提供原厂镜像下载，但多数设备的镜像都可以在[华为固件数据库](http://pro-teammt.ru/firmware-database/)中找到。要从压缩包内的 `UPDATE.APP` 提取镜像，需要使用[Huawei Update Extractor](https://forum.xda-developers.com/showthread.php?t=2433454)（仅 Windows）。
 
 ### EMUI 8
-For EMUI 8 devices, your device have a partition named `ramdisk`, which will be where Magisk is going to be installed.
+对于 EMUI 8 设备，它有一个名为`ramdisk`的分区，这将是 Magisk 的安装位置。
 
-- If you plan to use custom recoveries, simply follow the instructions for custom recovery above.
-Note that to install TWRP, you will first download the TWRP recovery image, and use
-`fastboot flash recovery_ramdisk /path/to/twrp.img` to install the custom recovery.
-- If you plan not to use custom recoveries, you will have to extract `RAMDISK.img` from your firmware. Follow the instructions for boot image patching above, but use the `RAMDISK.img` file instead of a boot image. To install the patched image back to your device, here is the fastboot command:
-`fastboot flash ramdisk /path/to/patched_boot.img`.
-Be aware you are flashing to `ramdisk`, not `boot`!
+- 如果准备使用自定义 Recovery，只需按照前文的 Recovery 说明操作。比如 TWRP，首先下载 TWRP 镜像，然后使用`fastboot flash recovery_ramdisk /path/to/twrp.img`刷入 TWRP。
+- 如果不使用自定义 Recovery，则必须从原厂镜像中提取`RAMDISK.img`。按照前文的 Boot 镜像修补说明进行操作，但使用`RAMDISK.img`文件而不是 Boot 镜像文件。要将修补后的镜像刷入设备，执行以下 fastBoot 命令：`fastboot flash ramdisk /path/to/patched_boot.img`。注意，需要刷入到`ramdisk`，而不是`boot`！
 
 ### EMUI 9
-For EMUI 9 devices, the `ramdisk` partition no longer exists. As a workaround, Magisk will be installed to the `recovery_ramdisk` partition. **This means that you HAVE TO boot to recovery every time you reboot. This also means that you CANNOT have Magisk and custom recoveries at the same time!** To boot to recovery, press **Power + Volume Up** when booting your device.
+对于 EMUI 9 设备，`ramdisk`分区不再存在。因此，Magisk 将安装到`recovery_ramdisk`分区。**这意味着每次重启时，都必须启动到 Recovery 模式。这也意味着无法同时拥有 Magisk 和自定义 Recovery！** 要启动到 Recovery 模式，请在开机时按住**电源键和音量加**。
 
-- If you plan to use custom recoveries, simply follow the instructions for custom recovery above.
-Note that to install TWRP, you will first download the TWRP recovery image, and use
-`fastboot flash recovery_ramdisk /path/to/twrp.img` to install the custom recovery.
-**Magisk will overwrite the custom recovery.**
-- If you plan not to use custom recoveries, you will have to extract `RECOVERY_RAMDIS.img` from your firmware. Follow the instructions for boot image patching above, but use the `RECOVERY_RAMDIS.img` file instead of a boot image. To install the patched image back to your device, here is the fastboot command:
-`fastboot flash recovery_ramdisk /path/to/patched_boot.img`.
-Be aware you are flashing to `recovery_ramdisk`, not `boot` nor `ramdisk`!
+- 如果准备使用自定义 Recovery 安装 Magisk，只需按照前文的 Recovery 说明操作。比如 TWRP，首先下载 TWRP 镜像，然后使用`fastboot flash recovery_ramdisk /path/to/twrp.img`刷入 TWRP。**Magisk 安装后会覆盖自定义 Recovery！**
+- 如果不使用自定义 Recovery，则必须从原厂镜像中提取`RECOVERY_RAMDIS.img`。按照前文的 Boot 镜像修补说明进行操作，但使用`RECOVERY_RAMDIS.img`文件而不是 Boot 镜像文件。要将修补后的镜像刷入设备，执行以下 fastboot 命令：`fastboot flash recovery_ramdisk /path/to/patched_boot.img`。注意，需要刷入到 `recovery_ramdisk`，不是 `boot` 也不是 `ramdisk`！
